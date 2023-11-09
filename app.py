@@ -55,8 +55,19 @@ def compliments():
 @app.route('/compliments_results')
 def compliments_results():
     """Show the user some compliments."""
+    # Retrieve form data
+    user_name = request.args.get('users_name', 'User')
+    wants_compliments = request.args.get('wants_compliments') == 'yes'
+    num_compliments = int(request.args.get('num_compliments', 1))
+
+    # Generate a list of compliments if the user wants them
+    compliments_to_show = random.sample(list_of_compliments, min(num_compliments, len(list_of_compliments))) if wants_compliments else []
+
+    # Create the context dictionary
     context = {
-        # TODO: Enter your context variables here.
+        'user_name': user_name,
+        'show_compliments': wants_compliments,
+        'compliments': compliments_to_show,
     }
 
     return render_template('compliments_results.html', **context)
